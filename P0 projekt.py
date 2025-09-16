@@ -8,6 +8,12 @@ import color_sensor
 from hub import port
 import color
 
+
+
+
+
+
+
 """
 Port E og F er de 2 små motorer
 Port A er den store motor
