@@ -19,6 +19,16 @@ reflectionC = color_sensor.reflection(port.C)
 reflectionD = color_sensor.reflection(port.D)
 
 #motor.run_for_degrees(port.E,grader,hastighed) armen
+from hub import light_matrix
+from hub import port
+import runloop
+import motor_pair
+import motor
+import color_sensor
+from hub import port
+import color
+import time
+black = 0
 
 async def main():
     global black
@@ -26,37 +36,38 @@ async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
     while go:
         reflectionC = color_sensor.reflection(port.C)
-        print("C")
-        print(reflectionC)
         reflectionD = color_sensor.reflection(port.D)
-        print("D")
-        print(reflectionD)
 
-        if  40 < reflectionD < 80 and 40 < reflectionC < 80:
+        if 30 < reflectionD < 80 and 30 < reflectionC < 80:
             motor_pair.move(motor_pair.PAIR_1,0,velocity=300)
-        elif 40 < reflectionD < 80:
+        elif 30 < reflectionD < 80:
             motor.run(port.E,-200)
             motor.run(port.F,100)
-        elif 40 < reflectionC < 80:
+        elif 30 < reflectionC < 80:
             motor.run(port.E,-100)
             motor.run(port.F,200)
-        elif 40 > reflectionD or 40 > reflectionC:
+        elif 30 > reflectionD or 30 > reflectionC:
             black += 1
+            black_1(black)
+            break 
 
-#koden under er ikke testet
-if black == 1:
-    reflectionC = color_sensor.reflection(port.C)
-    reflectionD = color_sensor.reflection(port.D)
-    while reflectionD >= 80 and reflectionC >= 80:
-        if reflectionD >= 80 and reflectionC >= 80:
+def black_1(black):
+    print("black")
+    if black == 1:
+        reflectionC = color_sensor.reflection(port.C)
+        reflectionD = color_sensor.reflection(port.D)
+        while reflectionD >= 80 and reflectionC >= 80:
             reflectionC = color_sensor.reflection(port.C)
             reflectionD = color_sensor.reflection(port.D)
-            motor.run(port.E,-100)
-            motor.run(port.F,200)
+            motor.run(port.E,0)
+            motor.run(port.F,0)
         else:
             runloop.run(main())
-            break
+        return False
+            
+runloop.run(main())
 
+"""
 async def klo():
     while True:
         afstand = distance_sensor.distance(port.B)
@@ -71,3 +82,4 @@ async def klo():
 runloop.run(klo())
 runloop.run(counter())
 runloop.run(main())
+"""
