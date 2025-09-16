@@ -19,15 +19,7 @@ reflectionC = color_sensor.reflection(port.C)
 reflectionD = color_sensor.reflection(port.D)
 
 #motor.run_for_degrees(port.E,grader,hastighed) armen
-from hub import light_matrix
-from hub import port
-import runloop
-import motor_pair
-import motor
-import color_sensor
-from hub import port
-import color
-import time
+
 black = 0
 
 async def main():
