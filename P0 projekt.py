@@ -43,6 +43,7 @@ async def main():
         elif 40 > reflectionD or 40 > reflectionC:
             black += 1
 
+#koden under er ikke testet
 if black == 1:
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
