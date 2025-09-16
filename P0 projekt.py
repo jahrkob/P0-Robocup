@@ -15,17 +15,16 @@ Port C og D er farvesensorer (C er den venstre farvesensor)
 Port B er afstandssensor
 """
 
+motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
+
 reflectionC = color_sensor.reflection(port.C)
 reflectionD = color_sensor.reflection(port.D)
-
-#motor.run_for_degrees(port.E,grader,hastighed) armen
 
 black = 0
 
 async def main():
     global black
     go = True
-    motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
     while go:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
@@ -39,25 +38,26 @@ async def main():
             motor.run(port.E,-100)
             motor.run(port.F,200)
         elif 30 > reflectionD or 30 > reflectionC:
+            global black
             black += 1
-            black_1(black)
-            break 
+            await black_1()
 
-def black_1(black):
-    print("black")
-    if black == 1:
+async def black_1():
+    reflectionC = color_sensor.reflection(port.C)
+    reflectionD = color_sensor.reflection(port.D)
+    while reflectionD >= 80 and reflectionC >= 80:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
-        while reflectionD >= 80 and reflectionC >= 80:
-            reflectionC = color_sensor.reflection(port.C)
-            reflectionD = color_sensor.reflection(port.D)
-            motor.run(port.E,0)
-            motor.run(port.F,0)
-        else:
-            runloop.run(main())
-        return False
-            
+        motor.run(port.E,-100)
+        motor.run(port.F,200)
+    else:
+        # runloop.run(main())
+        return
+
 runloop.run(main())
+
+if black == 1:
+    runloop.run(black_1())
 
 """
 async def klo():
