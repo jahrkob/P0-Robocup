@@ -45,6 +45,8 @@ async def main():
 async def black_1():
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
+    motor.run(port.E,-150)
+    motor.run(port.F,200)
     while reflectionD >= 80 and reflectionC >= 80:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
