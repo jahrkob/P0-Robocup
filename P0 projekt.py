@@ -43,6 +43,20 @@ async def main():
         elif 40 > reflectionD or 40 > reflectionC:
             black += 1
 
+
+if black == 1:
+    reflectionC = color_sensor.reflection(port.C)
+    reflectionD = color_sensor.reflection(port.D)
+    while reflectionD >= 80 and reflectionC >= 80:
+        if reflectionD >= 80 and reflectionC >= 80:
+            reflectionC = color_sensor.reflection(port.C)
+            reflectionD = color_sensor.reflection(port.D)
+            motor.run(port.E,-100)
+            motor.run(port.F,200)
+        else:
+            runloop.run(main())
+            break
+
 async def klo():
     while True:
         afstand = distance_sensor.distance(port.B)
