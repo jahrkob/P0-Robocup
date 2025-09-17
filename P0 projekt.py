@@ -76,8 +76,15 @@ async def black_line_counter(black):
             motor.run(port.E,-250)
             time.sleep(0.9)
             return
+    if black == 3:
+        reflectionC = color_sensor.reflection(port.C)
+        reflectionD = color_sensor.reflection(port.D)
+        motor_pair.move(motor_pair.PAIR_1)
 
 runloop.run(main())
+
+
+
 
 """
 async def klo():
@@ -94,3 +101,41 @@ async def klo():
 runloop.run(klo())
 runloop.run(main())
 """
+
+
+
+#FUCK HAN ER COOKED
+from hub import light_matrix
+from hub import port
+import runloop
+import motor_pair
+import motor
+import color_sensor
+from hub import port
+import color
+import time
+
+motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
+
+motor_pair.move_for_degrees(motor_pair.PAIR_1,-200,100,velocity=1050)
+time.sleep(0.7)
+motor_pair.move_for_degrees(motor_pair.PAIR_1,300,0,velocity=-1050)
+time.sleep(0.7)
+
+while True:
+    reflectionC = color_sensor.reflection(port.C)
+    reflectionD = color_sensor.reflection(port.D)
+    if 30 < reflectionD < 80 and 30 < reflectionC < 80:
+        motor_pair.move(motor_pair.PAIR_1,0,velocity=-300)
+    elif 30 < reflectionD < 80:
+        motor.run(port.E,200)
+        motor.run(port.F,-100)
+    elif 30 < reflectionC < 80:
+        motor.run(port.E,100)
+        motor.run(port.F,-200)
+    elif color_sensor.color(port.C) or color_sensor.color(port.D) is color.BLUE:
+        motor_pair.stop(motor_pair.PAIR_1)
+        break
+time.sleep(1)
+motor_pair.move_for_degrees(motor_pair.PAIR_1,100,0,velocity=1050)
+
