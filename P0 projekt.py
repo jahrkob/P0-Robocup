@@ -97,7 +97,6 @@ runloop.run(main())
 
 
 #Martins test section
-
 from hub import light_matrix
 from hub import port
 import runloop
@@ -114,6 +113,7 @@ Port A er den store motor
 Port C og D er farvesensorer (C er den venstre farvesensor)
 Port B er afstandssensor
 """
+
 
 motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
 
@@ -146,12 +146,16 @@ async def black_1(black):
         time.sleep(0.4)
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
-        while 70 < reflectionD and 70 < reflectionC:
+        while 80 < reflectionD and 80 < reflectionC:
             reflectionC = color_sensor.reflection(port.C)
             reflectionD = color_sensor.reflection(port.D)
             motor.run(port.E,-250)
             motor.run(port.F,150)
+            reflectionD = color_sensor.reflection(port.D)
         else:
+            print("fuck")
+            motor_pair.stop(motor_pair.PAIR_1)
+            motor.stop(port.E)
             motor.run(port.F,250)
             time.sleep(1)
             return
