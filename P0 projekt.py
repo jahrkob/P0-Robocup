@@ -139,10 +139,10 @@ async def main():
             motor.run(port.F,200)
         elif 30 > reflectionD or 30 > reflectionC:
             black += 1
-            await black_1()
+            await black_line_counter()
             
 
-async def black_1():
+async def black_line_counter():
     if black == 1:
         motor_pair.move(motor_pair.PAIR_1,20,velocity=300)
         while 60 < reflectionD and 60 < reflectionC:
