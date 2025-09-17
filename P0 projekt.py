@@ -128,7 +128,6 @@ async def main():
     while go:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
-
         if 30 < reflectionD < 80 and 30 < reflectionC < 80:
             motor_pair.move(motor_pair.PAIR_1,0,velocity=300)
         elif 30 < reflectionD < 80:
@@ -139,18 +138,24 @@ async def main():
             motor.run(port.F,200)
         elif 30 > reflectionD or 30 > reflectionC:
             black += 1
-            await black_line_counter()
-            
+            await black_1(black)
 
-async def black_line_counter():
+async def black_1(black):
     if black == 1:
-        motor_pair.move(motor_pair.PAIR_1,20,velocity=300)
-        while 60 < reflectionD and 60 < reflectionC:
+        motor_pair.move(motor_pair.PAIR_1,0,velocity=300)
+        time.sleep(0.4)
+        reflectionC = color_sensor.reflection(port.C)
+        reflectionD = color_sensor.reflection(port.D)
+        while 70 < reflectionD and 70 < reflectionC:
+            reflectionC = color_sensor.reflection(port.C)
+            reflectionD = color_sensor.reflection(port.D)
             motor.run(port.E,-250)
-            motor.run(port.F,200)
+            motor.run(port.F,150)
         else:
+            motor.run(port.F,250)
+            time.sleep(1)
             return
-        
+
 runloop.run(main())
 
 """
@@ -166,6 +171,5 @@ async def klo():
         await runloop.sleep_ms(100)
 
 runloop.run(klo())
-runloop.run(counter())
 runloop.run(main())
 """
