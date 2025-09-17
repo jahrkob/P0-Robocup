@@ -138,9 +138,9 @@ async def main():
             motor.run(port.F,200)
         elif 30 > reflectionD or 30 > reflectionC:
             black += 1
-            await black_1(black)
+            await black_line_counter(black)
 
-async def black_1(black):
+async def black_line_counter(black):
     if black == 1:
         motor_pair.move(motor_pair.PAIR_1,0,velocity=300)
         time.sleep(0.4)
@@ -153,11 +153,27 @@ async def black_1(black):
             motor.run(port.F,150)
             reflectionD = color_sensor.reflection(port.D)
         else:
-            print("fuck")
             motor_pair.stop(motor_pair.PAIR_1)
             motor.stop(port.E)
             motor.run(port.F,250)
-            time.sleep(1)
+            time.sleep(0.9)
+            return
+    if black == 2:
+        motor_pair.move(motor_pair.PAIR_1,0,velocity=300)
+        time.sleep(0.4)
+        reflectionC = color_sensor.reflection(port.C)
+        reflectionD = color_sensor.reflection(port.D)
+        while 80 < reflectionD and 80 < reflectionC:
+            reflectionC = color_sensor.reflection(port.C)
+            reflectionD = color_sensor.reflection(port.D)
+            motor.run(port.E,-150)
+            motor.run(port.F,250)
+            reflectionD = color_sensor.reflection(port.D)
+        else:
+            motor_pair.stop(motor_pair.PAIR_1)
+            motor.stop(port.F)
+            motor.run(port.E,-250)
+            time.sleep(0.9)
             return
 
 runloop.run(main())
