@@ -123,6 +123,7 @@ reflectionD = color_sensor.reflection(port.D)
 black = 0
 
 async def main():
+    global black
     go = True
     while go:
         reflectionC = color_sensor.reflection(port.C)
@@ -137,15 +138,18 @@ async def main():
             motor.run(port.E,-100)
             motor.run(port.F,200)
         elif 30 > reflectionD or 30 > reflectionC:
+            black += 1
             await black_1()
-            return
+            
 
 async def black_1():
-    while 60 < reflectionD and 60 < reflectionC:
-        motor.run(port.E,-250)
-        motor.run(port.F,200)
-    else:
-        return
+    if black == 1:
+        motor_pair.move(motor_pair.PAIR_1,20,velocity=300)
+        while 60 < reflectionD and 60 < reflectionC:
+            motor.run(port.E,-250)
+            motor.run(port.F,200)
+        else:
+            return
         
 runloop.run(main())
 
