@@ -65,7 +65,7 @@ async def black_line_counter(black):
         else:
             return
     if black == 3:
-        await runloop.sleep_ms(200)
+        await runloop.sleep_ms(500)
         motor_pair.move_for_degrees(motor_pair.PAIR_1,400,-40,velocity=-300)
         await runloop.sleep_ms(500)
         motor_pair.move_for_degrees(motor_pair.PAIR_1,500,0,velocity=-300)
@@ -76,12 +76,12 @@ async def black_line_counter(black):
         while reflectionC > 30 and reflectionD > 30:
             reflectionC = color_sensor.reflection(port.C)
             reflectionD = color_sensor.reflection(port.D)
-        if 30 < reflectionD < 70 and 30 < reflectionC < 70:
-            motor_pair.move(motor_pair.PAIR_1,0,velocity=-650)
-        elif 30 < reflectionD < 70:
-            motor_pair.move(motor_pair.PAIR_1,15,velocity=-500)
-        elif 30 < reflectionC < 70:
-            motor_pair.move(motor_pair.PAIR_1,-15,velocity=-500)
+            if 30 < reflectionD < 70 and 30 < reflectionC < 70:
+                motor_pair.move(motor_pair.PAIR_1,0,velocity=-650)
+            elif 30 < reflectionD < 70:
+                motor_pair.move(motor_pair.PAIR_1,15,velocity=-500)
+            elif 30 < reflectionC < 70:
+                motor_pair.move(motor_pair.PAIR_1,-15,velocity=-500)
         motor_pair.stop(motor_pair.PAIR_1)
         motor_pair.move_for_degrees(motor_pair.PAIR_1,-400,0,velocity=-500)
         await runloop.sleep_ms(1000)
@@ -89,6 +89,9 @@ async def black_line_counter(black):
         return
     if black == 4:
         return
+
+
+
 
 async def klo():
     while True:
