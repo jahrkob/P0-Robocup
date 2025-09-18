@@ -31,7 +31,7 @@ async def main():
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
         if 30 < reflectionD < 70 and 30 < reflectionC < 70:
-            motor_pair.move(motor_pair.PAIR_1,0,velocity=-650)
+            motor_pair.move(motor_pair.PAIR_1,0,velocity=-500)
         elif 30 < reflectionD < 70:
             motor_pair.move(motor_pair.PAIR_1,15,velocity=-500)
         elif 30 < reflectionC < 70:
@@ -67,9 +67,9 @@ async def black_line_counter(black):
     if black == 3:
         motor_pair.stop(motor_pair.PAIR_1)
         await runloop.sleep_ms(500)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,-50,velocity=-400)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,100,-50,velocity=-400)
         motor.run(port.A,200)
-        await runloop.sleep_ms(700)
+        await runloop.sleep_ms(1000)
         reflectionD = color_sensor.reflection(port.D)
         while reflectionD > 70:
             reflectionD = color_sensor.reflection(port.D)
@@ -87,16 +87,16 @@ async def black_line_counter(black):
                 await runloop.sleep_ms(1000)
                 break
             if 30 < reflectionD < 70 and 30 < reflectionC < 70:
-                motor_pair.move(motor_pair.PAIR_1,0,velocity=-450)
+                motor_pair.move(motor_pair.PAIR_1,0,velocity=-400)
             elif 30 < reflectionD < 70:
-                motor_pair.move(motor_pair.PAIR_1,15,velocity=-400)
+                motor_pair.move(motor_pair.PAIR_1,25,velocity=-400)
             elif 30 < reflectionC < 70:
-                motor_pair.move(motor_pair.PAIR_1,-15,velocity=-400)
+                motor_pair.move(motor_pair.PAIR_1,-25,velocity=-400)
         motor_pair.stop(motor_pair.PAIR_1)
         motor_pair.move_for_degrees(motor_pair.PAIR_1,-1000,0,velocity=-400)
         await runloop.sleep_ms(1500)
         motor.run(port.A,-200)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,90,velocity=-400)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,70,velocity=-400)
         await runloop.sleep_ms(1000)
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
