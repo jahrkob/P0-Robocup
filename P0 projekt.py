@@ -65,10 +65,11 @@ async def black_line_counter(black):
         else:
             return
     if black == 3:
+        motor_pair.stop(motor_pair.PAIR_1)
         await runloop.sleep_ms(500)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,-40,velocity=-300)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,-60,velocity=-400)
         await runloop.sleep_ms(500)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,500,0,velocity=-300)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,500,0,velocity=-400)
         await runloop.sleep_ms(500)
         motor.run(port.A,200)
         reflectionC = color_sensor.reflection(port.C)
@@ -83,9 +84,10 @@ async def black_line_counter(black):
             elif 30 < reflectionC < 70:
                 motor_pair.move(motor_pair.PAIR_1,-15,velocity=-500)
         motor_pair.stop(motor_pair.PAIR_1)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,-400,0,velocity=-500)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,-1000,0,velocity=-500)
         await runloop.sleep_ms(1000)
         motor_pair.move_for_degrees(motor_pair.PAIR_1,400,-100,velocity=-500)
+        await runloop.sleep_ms(1000)
         return
     if black == 4:
         return
