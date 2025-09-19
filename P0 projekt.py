@@ -23,7 +23,7 @@ reflectionC = color_sensor.reflection(port.C)
 reflectionD = color_sensor.reflection(port.D)
 
 motor.run(port.A,-100)
-black = 0
+black = 7
 
 async def main():
     global black
@@ -66,10 +66,9 @@ async def black_line_counter(black):
             return
     if black == 3:
         motor_pair.stop(motor_pair.PAIR_1)
-        await runloop.sleep_ms(500)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,100,-50,velocity=-400)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,300,-25,velocity=-400,acceleration=500)
         motor.run(port.A,200)
-        await runloop.sleep_ms(1000)
+        await runloop.sleep_ms(500)
         reflectionD = color_sensor.reflection(port.D)
         while reflectionD > 70:
             reflectionD = color_sensor.reflection(port.D)
@@ -89,14 +88,14 @@ async def black_line_counter(black):
             if 30 < reflectionD < 70 and 30 < reflectionC < 70:
                 motor_pair.move(motor_pair.PAIR_1,0,velocity=-400)
             elif 30 < reflectionD < 70:
-                motor_pair.move(motor_pair.PAIR_1,25,velocity=-400)
+                motor_pair.move(motor_pair.PAIR_1,35,velocity=-400)
             elif 30 < reflectionC < 70:
-                motor_pair.move(motor_pair.PAIR_1,-25,velocity=-400)
+                motor_pair.move(motor_pair.PAIR_1,-35,velocity=-400)
         motor_pair.stop(motor_pair.PAIR_1)
         motor_pair.move_for_degrees(motor_pair.PAIR_1,-1000,0,velocity=-400)
         await runloop.sleep_ms(1500)
         motor.run(port.A,-200)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,70,velocity=-400)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,90,velocity=-400)
         await runloop.sleep_ms(1000)
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
@@ -108,21 +107,63 @@ async def black_line_counter(black):
         else:
             return
     if black == 4:
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,500,0,velocity=-400,acceleration=500)
+        await runloop.sleep_ms(1000)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,200,100,velocity=-400,acceleration=500)
+        await runloop.sleep_ms(1000)
+
+
+        return
+    if black == 5:
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,1000,0,velocity=-700)
+        await runloop.sleep_ms(1500)
+        while True:
+            reflectionC = color_sensor.reflection(port.C)
+            reflectionD = color_sensor.reflection(port.D)
+            if 30 < reflectionD < 70 and 30 < reflectionC < 70:
+                motor_pair.move(motor_pair.PAIR_1,0,velocity=-500)
+            elif 30 < reflectionD < 70:
+                motor_pair.move(motor_pair.PAIR_1,15,velocity=-500)
+            elif 30 < reflectionC < 70:
+                motor_pair.move(motor_pair.PAIR_1,-15,velocity=-500)
+            else:
+                motor_pair.move_for_degrees(motor_pair.PAIR_1,1700,0,velocity=-500)
+                await runloop.sleep_ms(2000)
+                motor_pair.move_for_degrees(motor_pair.PAIR_1,400,50,velocity=-500)
+                await runloop.sleep_ms(1000)
+                return
+
+
+    if black == 6:
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,0,velocity=-500)
+        await runloop.sleep_ms(1000)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,1500,20,velocity=-600)
+        await runloop.sleep_ms(1000)
         return
 
+    if black == 7:
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,400,0,velocity=-400,acceleration=500)
+        await runloop.sleep_ms(1000)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,200,100,velocity=-400,acceleration=500)
+        await runloop.sleep_ms(1000)
+
+    if black == 8:
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,2500,0,velocity=-400,acceleration=500)
+        await runloop.sleep_ms(3000)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,200,70,velocity=-400,acceleration=500)
+        await runloop.sleep_ms(1000)
+        motor.run(port.A,200)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,1500,0,velocity=-400,acceleration=500)
+        await runloop.sleep_ms(2000)
+        motor.run(port.A,-200)
+        if color_sensor.color(port.C) and color_sensor.color(port.D) is color.BLUE:
+            motor_pair.move_for_degrees(motor_pair.PAIR_1,-500,0,velocity=-500)
+            await runloop.sleep_ms(1500)
+            return
 
 
+        motor_pair.stop(motor_pair.PAIR_1)
 
-async def klo():
-    while True:
-        afstand = distance_sensor.distance(port.B)
-        print(afstand)
-        if afstand is not -1 and afstand <= 170:
-            while True:
-                motor.run(port.A, -200)
-        else:
-            motor.run(port.A, 100)
-        await runloop.sleep_ms(100)
 
 runloop.run(main())
 
