@@ -21,7 +21,6 @@ Port B er afstandssensor
 """----------------------------------------
 ------------ VARIABLE SECTION -------------
 ----------------------------------------"""
-
 motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
 
 reflectionC = color_sensor.reflection(port.C)
@@ -34,7 +33,6 @@ checkpoint = 8
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
 ----------------------------------------"""
-
 # Arm squeeze function
 async def arm_squeeze():
     while True:
