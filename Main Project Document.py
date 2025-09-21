@@ -1,4 +1,4 @@
-# !/usr/bin/env micropython
+#!/usr/bin/env pybricks-micropython
 from hub import light_matrix, motion_sensor
 from hub import port
 import runloop
