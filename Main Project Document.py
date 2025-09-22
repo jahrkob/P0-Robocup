@@ -41,7 +41,7 @@ async def arm_squeeze():
         return False
 
 # Drive without line function
-async def drive_no_line():
+def drive_no_line():
     """ Vi skal tilføje koden her """
     pass
 
@@ -244,7 +244,23 @@ async def cp9():
         reflectionD = color_sensor.reflection(port.D)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-400,acceleration=500)
     return
-        
+
+# Checkpoint 10  (...)
+async def cp10():
+    return
+
+# Checkpoint 11  (...)
+async def cp11():
+    return
+
+# Checkpoint 12  (...)
+async def cp12():
+    return
+
+# Checkpoint 13  (...)
+async def cp13():
+    return
+
 """----------------------------------------
 ------------ MAIN RUN SECTION -------------
 ----------------------------------------"""
