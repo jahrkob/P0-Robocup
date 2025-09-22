@@ -286,7 +286,6 @@ def run_cp():
         cp8()
     elif checkpoint == 9:
         cp9()
-    """
     elif checkpoint == 10:
         cp10()
     elif checkpoint == 11:
@@ -295,7 +294,6 @@ def run_cp():
         cp12()
     elif checkpoint == 13:
         cp13()
-    """
 
 """----------------------------------------
 -------------- TEST SECTION ---------------
