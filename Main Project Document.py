@@ -11,7 +11,7 @@ import time
 import distance_sensor
 
 # INITIALIZE VARIABLES AND MOTORS
-""" 
+"""
 Port E og F er de 2 små motorer
 Port A er den store motor
 Port C og D er farvesensorer (C er den venstre farvesensor)
@@ -58,6 +58,7 @@ async def follow_line():
         elif 30 < reflectionC < 70:
             motor_pair.move(motor_pair.PAIR_1,-15,velocity=-500)
         elif 30 > reflectionD or 30 > reflectionC:
+            global checkpoint
             checkpoint += 1
             await run_cp(checkpoint)
 
@@ -68,7 +69,7 @@ async def follow_line():
 async def cp0():
     return
 
-# Checkpoint 1  (...)
+# Checkpoint 1(...)
 async def cp1():
     motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
     await runloop.sleep_ms(200)
@@ -81,7 +82,7 @@ async def cp1():
     else:
         return
 
-# Checkpoint 2  (...)
+# Checkpoint 2(...)
 async def cp2():
     motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
     await runloop.sleep_ms(200)
@@ -96,7 +97,7 @@ async def cp2():
     else:
         return
 
-# Checkpoint 3  (...)
+# Checkpoint 3(...)
 async def cp3():
     motor_pair.stop(motor_pair.PAIR_1)
     motor_pair.move_for_degrees(motor_pair.PAIR_1,300,-25,velocity=-400,acceleration=500)
@@ -106,7 +107,7 @@ async def cp3():
     while reflectionD > 70:
         reflectionD = color_sensor.reflection(port.D)
         motor_pair.move_for_degrees(motor_pair.PAIR_1,300,0,velocity=-300)
-    
+
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
     while color_sensor.color(port.C) or color_sensor.color(port.D)!= color.BLACK:
@@ -140,7 +141,7 @@ async def cp3():
     else:
         return
 
-# Checkpoint 4  (...)
+# Checkpoint 4(...)
 async def cp4():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,500,0,velocity=-400,acceleration=500)
     await runloop.sleep_ms(1000)
@@ -148,7 +149,7 @@ async def cp4():
     await runloop.sleep_ms(1000)
     return
 
-# Checkpoint 5  (...)
+# Checkpoint 5(...)
 async def cp5():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,1000,0,velocity=-700)
     await runloop.sleep_ms(1500)
@@ -168,7 +169,7 @@ async def cp5():
             await runloop.sleep_ms(1000)
             return
 
-# Checkpoint 6  (...)
+# Checkpoint 6(...)
 async def cp6():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,400,0,velocity=-500)
     await runloop.sleep_ms(1000)
@@ -177,14 +178,14 @@ async def cp6():
 
     return
 
-# Checkpoint 7  (...)
+# Checkpoint 7(...)
 async def cp7():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,400,0,velocity=-400,acceleration=500)
     await runloop.sleep_ms(1000)
     motor_pair.move_for_degrees(motor_pair.PAIR_1,200,100,velocity=-400,acceleration=500)
     await runloop.sleep_ms(1000)
 
-# Checkpoint 8  (...)
+# Checkpoint 8(...)
 async def cp8():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,2000,0,velocity=-400,acceleration=500)
     await runloop.sleep_ms(3000)
@@ -220,16 +221,86 @@ async def cp8():
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-400,acceleration=500)
-    
+
     motor_pair.move_for_degrees(motor_pair.PAIR_1,200,0,velocity=-500)
     await runloop.sleep_ms(1000)
     motor_pair.move_for_degrees(motor_pair.PAIR_1,200,100,velocity=-500)
     await runloop.sleep_ms(1000)
     return
 
-# Checkpoint 9  (...)
+# Checkpoint 9(...)
 async def cp9():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,100,-100,velocity=-500, acceleration=500)
+    await runloop.sleep_ms(700)
+    reflectionC = color_sensor.reflection(port.C)
+    reflectionD = color_sensor.reflection(port.D)
+    while reflectionC and reflectionD > 70:
+        reflectionC = color_sensor.reflection(port.C)
+        reflectionD = color_sensor.reflection(port.D)
+        motor_pair.move_for_degrees(motor_pair.PAIR_1,3000,10,velocity=-500, acceleration=500)
+    return
+
+# Checkpoint 10(...)
+async def cp10():
+    return
+
+# Checkpoint 11(...)
+async def cp11():
+    return
+
+# Checkpoint 12(...)
+async def cp12():
+    return
+
+# Checkpoint 13(...)
+async def cp13():
+    return
+
+"""----------------------------------------
+------------ MAIN RUN SECTION -------------
+----------------------------------------"""
+async def run_cp(checkpoint):
+    if checkpoint == 0:
+        runloop.run(cp0())
+    elif checkpoint == 1:
+        runloop.run(cp1())
+    elif checkpoint == 2:
+        runloop.run(cp2())
+    elif checkpoint == 3:
+        runloop.run(cp3())
+    elif checkpoint == 4:
+        runloop.run(cp4())
+    elif checkpoint == 5:
+        runloop.run(cp5())
+    elif checkpoint == 6:
+        runloop.run(cp6())
+    elif checkpoint == 7:
+        runloop.run(cp7())
+    elif checkpoint == 8:
+        runloop.run(cp8())
+    elif checkpoint == 9:
+        runloop.run(cp9())
+    elif checkpoint == 10:
+        runloop.run(cp10())
+    elif checkpoint == 11:
+        runloop.run(cp11())
+    elif checkpoint == 12:
+        runloop.run(cp12())
+    elif checkpoint == 13:
+        runloop.run(cp13())
+
+"""----------------------------------------
+-------------- TEST SECTION ---------------
+----------------------------------------"""
+runloop.run(follow_line())
+
+
+
+
+"""
+cp9
+
+motor_pair.move_for_degrees(motor_pair.PAIR_1,100,-100,velocity=-500, acceleration=500)
     await runloop.sleep_ms(1000)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
@@ -244,58 +315,4 @@ async def cp9():
         reflectionD = color_sensor.reflection(port.D)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-400,acceleration=500)
     return
-
-# Checkpoint 10  (...)
-async def cp10():
-    return
-
-# Checkpoint 11  (...)
-async def cp11():
-    return
-
-# Checkpoint 12  (...)
-async def cp12():
-    return
-
-# Checkpoint 13  (...)
-async def cp13():
-    return
-
-"""----------------------------------------
------------- MAIN RUN SECTION -------------
-----------------------------------------"""
-def run_cp():
-    global checkpoint
-    if checkpoint == 0:
-        cp0()
-    elif checkpoint == 1:
-        cp1()
-    elif checkpoint == 2:
-        cp2()
-    elif checkpoint == 3:
-        cp3()
-    elif checkpoint == 4:
-        cp4()
-    elif checkpoint == 5:
-        cp5()
-    elif checkpoint == 6:
-        cp6()
-    elif checkpoint == 7:
-        cp7()
-    elif checkpoint == 8:
-        cp8()
-    elif checkpoint == 9:
-        cp9()
-    elif checkpoint == 10:
-        cp10()
-    elif checkpoint == 11:
-        cp11()
-    elif checkpoint == 12:
-        cp12()
-    elif checkpoint == 13:
-        cp13()
-
-"""----------------------------------------
--------------- TEST SECTION ---------------
-----------------------------------------"""
-runloop.run(follow_line())
+"""
