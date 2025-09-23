@@ -40,7 +40,7 @@ async def arm_squeeze():
         await runloop.sleep_ms(3000)
         return False
 
-# Drive without line function
+# Drive without a line function
 def drive_no_line():
     """ Vi skal tilføje koden her """
     pass
@@ -69,12 +69,13 @@ async def follow_line():
 async def cp0():
     return
 
-# Checkpoint 1(...)
+# Checkpoint 1 (Right turn)
 async def cp1():
     motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
     await runloop.sleep_ms(200)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
+
     while 70 < reflectionD and 70 < reflectionC:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
@@ -82,7 +83,7 @@ async def cp1():
     else:
         return
 
-# Checkpoint 2(...)
+# Checkpoint 2 (Left turn)
 async def cp2():
     motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
     await runloop.sleep_ms(200)
@@ -97,7 +98,7 @@ async def cp2():
     else:
         return
 
-# Checkpoint 3(...)
+# Checkpoint 3 (Move first bottle)
 async def cp3():
     motor_pair.stop(motor_pair.PAIR_1)
     motor_pair.move_for_degrees(motor_pair.PAIR_1,300,-25,velocity=-400,acceleration=500)
@@ -141,7 +142,7 @@ async def cp3():
     else:
         return
 
-# Checkpoint 4(...)
+# Checkpoint 4 (Left turn to ramp)
 async def cp4():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,500,0,velocity=-400,acceleration=500)
     await runloop.sleep_ms(1000)
@@ -149,7 +150,7 @@ async def cp4():
     await runloop.sleep_ms(1000)
     return
 
-# Checkpoint 5(...)
+# Checkpoint 5 (Ramp)
 async def cp5():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,1000,0,velocity=-700)
     await runloop.sleep_ms(1500)
@@ -169,7 +170,7 @@ async def cp5():
             await runloop.sleep_ms(1000)
             return
 
-# Checkpoint 6(...)
+# Checkpoint 6 (Choose correct line)
 async def cp6():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,400,0,velocity=-500)
     await runloop.sleep_ms(1000)
@@ -178,14 +179,14 @@ async def cp6():
 
     return
 
-# Checkpoint 7(...)
+# Checkpoint 7 (Turn left to "bullseye")
 async def cp7():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,400,0,velocity=-400,acceleration=500)
     await runloop.sleep_ms(1000)
     motor_pair.move_for_degrees(motor_pair.PAIR_1,200,100,velocity=-400,acceleration=500)
     await runloop.sleep_ms(1000)
 
-# Checkpoint 8(...)
+# Checkpoint 8 (Bullseye)
 async def cp8():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,2000,0,velocity=-400,acceleration=500)
     await runloop.sleep_ms(3000)
@@ -202,6 +203,7 @@ async def cp8():
             motor_pair.move(motor_pair.PAIR_1,0,velocity=-400,acceleration=500)
         else:
             break
+
     motor.run(port.A, -200)
     await runloop.sleep_ms(500)
     motor_pair.move_for_degrees(motor_pair.PAIR_1,-1300,0,velocity=-300)
@@ -217,6 +219,7 @@ async def cp8():
     await runloop.sleep_ms(1000)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
+    
     while reflectionC > 70 and reflectionD > 70:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
@@ -228,19 +231,21 @@ async def cp8():
     await runloop.sleep_ms(1000)
     return
 
-# Checkpoint 9(...)
+# Checkpoint 9 (Drive around bottle 1)
 async def cp9():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,100,-100,velocity=-500, acceleration=500)
     await runloop.sleep_ms(700)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
+    
     while reflectionC > 70 and reflectionD > 70:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
         motor_pair.move(motor_pair.PAIR_1,10,velocity=-500, acceleration=500)
+    
     return
 
-# Checkpoint 10(...)
+# Checkpoint 10 (Move between walls)
 async def cp10():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,1000,0,velocity=-500, acceleration=500)
     await runloop.sleep_ms(2000)
@@ -257,6 +262,7 @@ async def cp10():
 
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
+    
     while reflectionC > 70 and reflectionD > 70:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
@@ -264,20 +270,22 @@ async def cp10():
 
     return
 
-# Checkpoint 11(...)
+# Checkpoint 11 (Drive around bottle 2)
 async def cp11():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,140,-100,velocity=-500, acceleration=500)
     await runloop.sleep_ms(900)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
+    
     while reflectionC > 70 and reflectionD > 70:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
         motor_pair.move(motor_pair.PAIR_1,10,velocity=-500, acceleration=500)
+    
     return
 
 
-# Checkpoint 12(...)
+# Checkpoint 12 (Runway)
 async def cp12():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,100,54,velocity=-500, acceleration=500)
     await runloop.sleep_ms(500)
