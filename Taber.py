@@ -225,8 +225,8 @@ async def cp8():
 
 # Checkpoint 9(...)
 async def cp9():
-    motor_pair.move_for_degrees(motor_pair.PAIR_1,100,-100,velocity=-500, acceleration=500)
-    await runloop.sleep_ms(700)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,100,-100,velocity=-500, acceleration=500)
+    
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
     while reflectionC > 70 and reflectionD > 70:
@@ -237,8 +237,8 @@ async def cp9():
 
 # Checkpoint 10(...)
 async def cp10():
-    motor_pair.move_for_degrees(motor_pair.PAIR_1,1000,0,velocity=-500, acceleration=500)
-    await runloop.sleep_ms(2000)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,1000,0,velocity=-500, acceleration=500)
+    
     motor_pair.move_for_degrees(motor_pair.PAIR_1,100,100,velocity=-200, acceleration=500)
     await runloop.sleep_ms(2000)
 
