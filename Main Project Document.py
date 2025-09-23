@@ -33,7 +33,6 @@ checkpoint = 0
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
 ----------------------------------------"""
-
 # Turn right via motion sensor
 def until_right(x):
     while motion_sensor.tilt_angles()[0] not in range(x,x+50):
