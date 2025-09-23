@@ -5,10 +5,10 @@ import runloop
 import motor_pair
 import motor
 import color_sensor
-from hub import port
 import color
 import time
 import distance_sensor
+import sys
 
 # INITIALIZE VARIABLES AND MOTORS
 """
@@ -69,7 +69,6 @@ async def follow_line():
         elif 30 < reflectionC < 70:
             motor_pair.move(motor_pair.PAIR_1,-15,velocity=-500)
         elif 30 > reflectionD or 30 > reflectionC:
-            global checkpoint
             checkpoint += 1
             await run_cp(checkpoint)
 
@@ -115,6 +114,7 @@ async def cp3():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,300,-25,velocity=-400,acceleration=500)
     motor.run(port.A,200)
     await runloop.sleep_ms(500)
+    
     reflectionD = color_sensor.reflection(port.D)
     while reflectionD > 70:
         reflectionD = color_sensor.reflection(port.D)
@@ -122,12 +122,13 @@ async def cp3():
 
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
-    while color_sensor.color(port.C) or color_sensor.color(port.D)!= color.BLACK:
-        color_sensor.color(port.C)
-        color_sensor.color(port.D)
+    while (color_sensor.color(port.C) != color.BLACK) or (color_sensor.color(port.D) != color.BLACK):
+        c_col = color_sensor.color(port.C)
+        d_col = color_sensor.color(port.D)
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
-        if color_sensor.color(port.C) and color_sensor.color(port.D) is color.BLUE:
+
+        if (c_col == color.BLUE) and (d_col == color.BLUE):
             motor_pair.move_for_degrees(motor_pair.PAIR_1,500,0,velocity=-500)
             await runloop.sleep_ms(1000)
             break
@@ -219,7 +220,7 @@ async def cp8():
     await runloop.sleep_ms(500)
     motor_pair.move_for_degrees(motor_pair.PAIR_1,-1300,0,velocity=-300)
     await runloop.sleep_ms(3500)
-    motor_pair.stop
+    motor_pair.stop(motor_pair.PAIR_1)
     await runloop.sleep_ms(1500)
     motor.run(port.A,200)
     await runloop.sleep_ms(1000)
@@ -311,7 +312,7 @@ async def cp12():
         afstand = distance_sensor.distance(port.B)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
     motor_pair.stop(motor_pair.PAIR_1)
-    quit
+    sys.exit()
 
 """----------------------------------------
 ------------ MAIN RUN SECTION -------------
