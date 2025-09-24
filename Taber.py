@@ -26,7 +26,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
 reflectionC = color_sensor.reflection(port.C)
 reflectionD = color_sensor.reflection(port.D)
 
-checkpoint = 6
+checkpoint = 0
 
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
@@ -76,8 +76,7 @@ async def cp0():
 
 # Checkpoint 1 (Right turn)
 async def cp1():
-    motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
-    await runloop.sleep_ms(200)
+    await motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
     
@@ -90,8 +89,7 @@ async def cp1():
 
 # Checkpoint 2 (Left turn)
 async def cp2():
-    motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
-    await runloop.sleep_ms(200)
+    await motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
 
@@ -276,8 +274,8 @@ async def cp11():
 
 # Checkpoint 12 (Runway)
 async def cp12():
-    motor_pair.move_for_degrees(motor_pair.PAIR_1,100,54,velocity=-500, acceleration=500)
-    await runloop.sleep_ms(500)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,100,54,velocity=-500, acceleration=500)
+
     afstand = distance_sensor.distance(port.B)
     while afstand >=1550 or afstand == -1:
         afstand = distance_sensor.distance(port.B)
