@@ -295,7 +295,6 @@ async def cp11():
     
     return
 
-
 # Checkpoint 12 (Runway)
 async def cp12():
     motor_pair.move_for_degrees(motor_pair.PAIR_1,100,54,velocity=-500, acceleration=500)
