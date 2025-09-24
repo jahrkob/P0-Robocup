@@ -274,8 +274,8 @@ async def cp11():
 
 # Checkpoint 12(...)
 async def cp12():
-    motor_pair.move_for_degrees(motor_pair.PAIR_1,100,54,velocity=-500, acceleration=500)
-    await runloop.sleep_ms(500)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,100,54,velocity=-500, acceleration=500)
+
     afstand = distance_sensor.distance(port.B)
     while afstand >=1550 or afstand == -1:
         afstand = distance_sensor.distance(port.B)
