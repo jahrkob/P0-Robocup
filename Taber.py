@@ -26,7 +26,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
 reflectionC = color_sensor.reflection(port.C)
 reflectionD = color_sensor.reflection(port.D)
 
-checkpoint = 6
+checkpoint = 0
 
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
@@ -77,8 +77,7 @@ async def cp0():
 
 # Checkpoint 1(...)
 async def cp1():
-    motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
-    await runloop.sleep_ms(200)
+    await motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
     while 70 < reflectionD and 70 < reflectionC:
@@ -90,8 +89,7 @@ async def cp1():
 
 # Checkpoint 2(...)
 async def cp2():
-    motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
-    await runloop.sleep_ms(200)
+    await motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
 
