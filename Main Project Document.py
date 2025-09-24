@@ -81,7 +81,9 @@ async def cp0():
 
 # Checkpoint 1 (Right turn)
 async def cp1():
-    await motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
+    motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
+    await runloop.sleep(200)
+    
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
 
@@ -94,8 +96,9 @@ async def cp1():
 
 # Checkpoint 2 (Left turn)
 async def cp2():
-    await motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
-    
+    motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
+    await runloop.sleep(200)
+
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
 
