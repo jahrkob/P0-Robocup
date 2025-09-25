@@ -1,12 +1,10 @@
-#!/usr/bin/env pybricks-micropython
-from hub import light_matrix, motion_sensor
+from hub import motion_sensor
 from hub import port
 import runloop
 import motor_pair
 import motor
 import color_sensor
 import color
-import time
 import distance_sensor
 import sys
 
@@ -26,7 +24,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
 reflectionC = color_sensor.reflection(port.C)
 reflectionD = color_sensor.reflection(port.D)
 
-checkpoint = 9
+checkpoint = 0
 
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
@@ -35,22 +33,19 @@ checkpoint = 9
 motor.run(port.A,-100)
 
 # Turn via motion sensor
-def until(z,x):
-    while motion_sensor.tilt_angles()[0] not in range(x,x+50):
-        motor_pair.move(motor_pair.PAIR_1,-z,velocity=-400, acceleration=500)
-
-# Arm squeeze function
-async def arm_squeeze():
-    while True:
-        motor.run(port.A,-200)
-        await runloop.sleep_ms(3000)
-        return False
+def until_gyro(stering,interval):
+    while motion_sensor.tilt_angles()[0] not in range(interval,interval+50):
+        motor_pair.move(motor_pair.PAIR_1,-stering,velocity=-300, acceleration=500)
 
 # Drive without line function
-def drive_no_line():
-    """ Vi skal tilføje koden her """
-    pass
-
+def until_line(stering,speed):
+    reflectionC = color_sensor.reflection(port.C)
+    reflectionD = color_sensor.reflection(port.D)
+    while 70 < reflectionD and 70 < reflectionC:
+        reflectionC = color_sensor.reflection(port.C)
+        reflectionD = color_sensor.reflection(port.D)
+        motor_pair.move(motor_pair.PAIR_1,-stering,velocity=-speed)
+        
 # Follow line function
 async def follow_line():
     global checkpoint
@@ -67,6 +62,14 @@ async def follow_line():
             checkpoint += 1
             await run_cp(checkpoint)
 
+# The function used on the runway
+def runway():
+    afstand = distance_sensor.distance(port.B)
+    while afstand >=1550 or afstand == -1:
+        afstand = distance_sensor.distance(port.B)
+        motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
+
+
 """----------------------------------------
 ----------- CHECKPOINT SECTION ------------
 ----------------------------------------"""
@@ -78,42 +81,23 @@ async def cp0():
 async def cp1():
     motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
     await runloop.sleep_ms(200)
-    reflectionC = color_sensor.reflection(port.C)
-    reflectionD = color_sensor.reflection(port.D)
-
-    while 70 < reflectionD and 70 < reflectionC:
-        reflectionC = color_sensor.reflection(port.C)
-        reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move(motor_pair.PAIR_1,-7,velocity=-600)
-    else:
-        return
+    until_line(7,600)
+    return
 
 # Checkpoint 2 (Left turn)
 async def cp2():
     motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
     await runloop.sleep_ms(200)
-    reflectionC = color_sensor.reflection(port.C)
-    reflectionD = color_sensor.reflection(port.D)
-
-    while 70 < reflectionD and 70 < reflectionC:
-        reflectionC = color_sensor.reflection(port.C)
-        reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
-        reflectionD = color_sensor.reflection(port.D)
-    else:
-        return
+    until_line(-5,600)
+    return
 
 # Checkpoint 3 (Move first bottle)
 async def cp3():
     motion_sensor.reset_yaw(0)
-    until(25,-600)
+    until_gyro(100,-400)
     motor.run(port.A,200)
 
-    reflectionD = color_sensor.reflection(port.D)
-    while reflectionD > 70:
-        reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,300,0,velocity=-300)
-
+    until_line(0,300)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
     while (color_sensor.color(port.C) != color.BLACK) or (color_sensor.color(port.D) != color.BLACK):
@@ -131,25 +115,18 @@ async def cp3():
             motor_pair.move(motor_pair.PAIR_1,35,velocity=-400)
         elif 30 < reflectionC < 70:
             motor_pair.move(motor_pair.PAIR_1,-35,velocity=-400)
+
     motor_pair.stop(motor_pair.PAIR_1)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,-600,0,velocity=-400)
     motor.run(port.A,-200)
-    until(-100,300)
-    reflectionC = color_sensor.reflection(port.C)
-    reflectionD = color_sensor.reflection(port.D)
-
-    while reflectionC > 70 and reflectionD > 70:
-        reflectionC = color_sensor.reflection(port.C)
-        reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move_for_degrees(motor_pair.PAIR_1,200,0,velocity=-600)
-    else:
-        return
+    until_gyro(-100,300)
+    until_line(0,600)
 
 # Checkpoint 4 (Left turn to ramp)
 async def cp4():
     motion_sensor.reset_yaw(0)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,500,0,velocity=-400,acceleration=500)
-    until(-100,700)
+    until_gyro(-100,700)
     motor_pair.stop(motor_pair.PAIR_1)
     return
 
@@ -168,28 +145,28 @@ async def cp5():
             motor_pair.move(motor_pair.PAIR_1,-15,velocity=-500)
         else:
             await motor_pair.move_for_degrees(motor_pair.PAIR_1,1200,0,velocity=-500)
-            until(-50,300)
+            until_gyro(-50,300)
             return
 
 # Checkpoint 6 (Choose correct line)
 async def cp6():
     motion_sensor.reset_yaw(0)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,400,0,velocity=-500)
-    until(-5,270)
+    until_gyro(-5,270)
     return
 
 # Checkpoint 7 (Turn left to "bullseye")
 async def cp7():
     motion_sensor.reset_yaw(0)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,400,0,velocity=-400,acceleration=500)
-    until(-100,400)
+    until_gyro(-100,400)
     return
 
 # Checkpoint 8 (Bullseye)
 async def cp8():
     motion_sensor.reset_yaw(0)
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1,1300,0,velocity=-400,acceleration=500)
-    until(-20,250)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,1150,0,velocity=-400,acceleration=500)
+    until_gyro(-20,250)
     motor.run(port.A,200)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
@@ -206,81 +183,64 @@ async def cp8():
     await runloop.sleep_ms(500)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,-1300,0,velocity=-300)
     motor_pair.stop(motor_pair.PAIR_1)
+    await runloop.sleep_ms(500)
     motor.run(port.A,200)
     await runloop.sleep_ms(500)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,-1000,0,velocity=-500)
     motor.run(port.A,-200)
 
-    until(-60,1500)
+    until_gyro(-60,1700)
 
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
-    while reflectionC > 70 and reflectionD > 70:
-        reflectionC = color_sensor.reflection(port.C)
-        reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move(motor_pair.PAIR_1,0,velocity=-400,acceleration=500)
+    until_line(0,500)
 
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,200,0,velocity=-500)
-    until(-100,-1700)
+    until_line(-100,300)
     return
 
 # Checkpoint 9 (Drive around bottle 1)
 async def cp9():
     motion_sensor.reset_yaw(0)
-    until(100,-250)
-    reflectionC = color_sensor.reflection(port.C)
-    reflectionD = color_sensor.reflection(port.D)
-    while reflectionC > 70 and reflectionD > 70:
-        reflectionC = color_sensor.reflection(port.C)
-        reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move(motor_pair.PAIR_1,17,velocity=-500, acceleration=500)
-    return
+    until_gyro(100,-250)
+    until_line(-10,500)
 
 # Checkpoint 10 (Move between walls)
 async def cp10():
+    motion_sensor.reset_yaw(0)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,1000,0,velocity=-500, acceleration=500)
 
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1,100,100,velocity=-200, acceleration=500)
+    until_gyro(-100,250)
 
     afstand = distance_sensor.distance(port.B)
-    while afstand >= 260 or afstand == -1:
+    while afstand >= 255 or afstand == -1:
         afstand = distance_sensor.distance(port.B)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-500)
-
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1,150,-100,velocity=-200,acceleration=500)
-
-    reflectionC = color_sensor.reflection(port.C)
-    reflectionD = color_sensor.reflection(port.D)
-    while reflectionC > 70 and reflectionD > 70:
-        reflectionC = color_sensor.reflection(port.C)
-        reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move(motor_pair.PAIR_1,2,velocity=-500, acceleration=500)
-
-    return
+        afstand = distance_sensor.distance(port.B)
+    motor_pair.stop(motor_pair.PAIR_1)
+    await runloop.sleep_ms(500)
+    until_gyro(100,-130)
+    until_line(-3,500)
+    
 
 # Checkpoint 11 (Drive around bottle 2)
 async def cp11():
-    motor_pair.move_for_degrees(motor_pair.PAIR_1,140,-100,velocity=-500, acceleration=500)
-    await runloop.sleep_ms(900)
-    reflectionC = color_sensor.reflection(port.C)
-    reflectionD = color_sensor.reflection(port.D)
-
-    while reflectionC > 70 and reflectionD > 70:
-        reflectionC = color_sensor.reflection(port.C)
-        reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move(motor_pair.PAIR_1,10,velocity=-500, acceleration=500)
-    return
+    motion_sensor.reset_yaw(0)
+    until_gyro(100,-300)
+    until_line(-10,500)
 
 # Checkpoint 12 (Runway)
 async def cp12():
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1,100,54,velocity=-500, acceleration=500)
-
+    #until_gyro(-100,1700)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,200,21,velocity=-300, acceleration=500)
     afstand = distance_sensor.distance(port.B)
     while afstand >=1550 or afstand == -1:
         afstand = distance_sensor.distance(port.B)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
+
     motor_pair.stop(motor_pair.PAIR_1)
     await runloop.sleep_ms(1000)
+
     afstand = distance_sensor.distance(port.B)
     while afstand >=1550 or afstand == -1:
         afstand = distance_sensor.distance(port.B)
