@@ -33,17 +33,6 @@ checkpoint = 0
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
 ----------------------------------------"""
-
-# Turn right via motion sensor
-def until_right(x):
-    while motion_sensor.tilt_angles()[0] not in range(x,x+50):
-        motor_pair.move(motor_pair.PAIR_1,-100,velocity=-400)
-
-# Turn left via motion sensor
-def until_left(x):
-    while motion_sensor.tilt_angles()[0] not in range(x,x+50):
-        motor_pair.move(motor_pair.PAIR_1,100,velocity=-400)
-
 # Arm squeeze function
 async def arm_squeeze():
     while True:
@@ -83,7 +72,7 @@ async def cp0():
 async def cp1():
     motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
     await runloop.sleep(200)
-    
+
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
 
