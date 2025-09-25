@@ -26,7 +26,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.E, port.F)
 reflectionC = color_sensor.reflection(port.C)
 reflectionD = color_sensor.reflection(port.D)
 
-checkpoint = 0
+checkpoint = 9
 
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
@@ -37,7 +37,7 @@ motor.run(port.A,-100)
 # Turn via motion sensor
 def until(z,x):
     while motion_sensor.tilt_angles()[0] not in range(x,x+50):
-        motor_pair.move(motor_pair.PAIR_1,-z,velocity=-400)
+        motor_pair.move(motor_pair.PAIR_1,-z,velocity=-400, acceleration=500)
 
 # Arm squeeze function
 async def arm_squeeze():
@@ -76,10 +76,11 @@ async def cp0():
 
 # Checkpoint 1 (Right turn)
 async def cp1():
-    await motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
+    motor_pair.move(motor_pair.PAIR_1,-10,velocity=-600)
+    await runloop.sleep_ms(200)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
-    
+
     while 70 < reflectionD and 70 < reflectionC:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
@@ -89,7 +90,8 @@ async def cp1():
 
 # Checkpoint 2 (Left turn)
 async def cp2():
-    await motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
+    motor_pair.move(motor_pair.PAIR_1,5,velocity=-600)
+    await runloop.sleep_ms(200)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
 
@@ -199,16 +201,16 @@ async def cp8():
             motor_pair.move(motor_pair.PAIR_1,0,velocity=-400,acceleration=500)
         else:
             break
-    
+
     motor.run(port.A,-200)
     await runloop.sleep_ms(500)
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1,-1200,0,velocity=-300)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,-1300,0,velocity=-300)
     motor_pair.stop(motor_pair.PAIR_1)
     motor.run(port.A,200)
     await runloop.sleep_ms(500)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,-1000,0,velocity=-500)
     motor.run(port.A,-200)
-    
+
     until(-60,1500)
 
     reflectionC = color_sensor.reflection(port.C)
@@ -218,37 +220,34 @@ async def cp8():
         reflectionD = color_sensor.reflection(port.D)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-400,acceleration=500)
 
-    motor_pair.move_for_degrees(motor_pair.PAIR_1,200,0,velocity=-500)
-    await runloop.sleep_ms(1000)
-    until(100,400)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,200,0,velocity=-500)
+    until(-100,-1700)
     return
 
 # Checkpoint 9 (Drive around bottle 1)
 async def cp9():
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1,100,-100,velocity=-500, acceleration=500)
-    
+    motion_sensor.reset_yaw(0)
+    until(100,-250)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
     while reflectionC > 70 and reflectionD > 70:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
-        motor_pair.move(motor_pair.PAIR_1,10,velocity=-500, acceleration=500)
+        motor_pair.move(motor_pair.PAIR_1,17,velocity=-500, acceleration=500)
     return
 
 # Checkpoint 10 (Move between walls)
 async def cp10():
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,1000,0,velocity=-500, acceleration=500)
-    
-    motor_pair.move_for_degrees(motor_pair.PAIR_1,100,100,velocity=-200, acceleration=500)
-    await runloop.sleep_ms(2000)
+
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,100,100,velocity=-200, acceleration=500)
 
     afstand = distance_sensor.distance(port.B)
-    while afstand >= 255 or afstand == -1:
+    while afstand >= 260 or afstand == -1:
         afstand = distance_sensor.distance(port.B)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-500)
 
-    motor_pair.move_for_degrees(motor_pair.PAIR_1,150,-100,velocity=-200,acceleration=500)
-    await runloop.sleep_ms(2000)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1,150,-100,velocity=-200,acceleration=500)
 
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
@@ -265,7 +264,7 @@ async def cp11():
     await runloop.sleep_ms(900)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
-    
+
     while reflectionC > 70 and reflectionD > 70:
         reflectionC = color_sensor.reflection(port.C)
         reflectionD = color_sensor.reflection(port.D)
