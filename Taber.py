@@ -1,5 +1,4 @@
-from hub import motion_sensor
-from hub import port
+from hub import motion_sensor, sound, port
 import runloop
 import motor_pair
 import motor
@@ -29,12 +28,58 @@ checkpoint = 0
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
 ----------------------------------------"""
+#useless section
+
+# Zelda's Main Theme notes and durations
+zelda_notes = [
+    392, 392, 392, 311, 466, 392, 311, 466, 392,# Intro
+    587, 587, 587, 622, 466, 369, 311, 466, 392,# Main theme part 1
+    784, 392, 392, 784, 739, 698, 659, 622, 659,# Climbing part
+    415, 554, 523, 493, 466, 440, 466,            # Descending part
+    311, 369, 311, 466, 392, 311, 466, 392,        # Return to theme
+    587, 587, 587, 622, 466, 369, 311, 466, 392,# Final phrase
+    392, 311, 466, 392                            # Ending
+]
+
+zelda_durations = [
+    300, 150, 150, 150, 150, 150, 150, 150, 600,# Intro
+    300, 150, 150, 150, 150, 150, 150, 150, 600,# Main theme part 1
+    300, 150, 150, 300, 150, 150, 150, 150, 600,# Climbing part
+    150, 150, 150, 150, 150, 150, 600,            # Descending part
+    150, 150, 150, 150, 150, 150, 150, 600,        # Return to theme
+    300, 150, 150, 150, 150, 150, 150, 150, 900,# Final phrase
+    600, 150, 150, 1200                            # Ending
+]
+
+# Super Mario Bros Main Theme
+mario_notes = [
+    # Intro line
+    659, 659, 0, 659, 0, 523, 659, 0, 784, 400
+]
+mario_durations = [
+    # Intro line
+    200, 200, 100, 200, 100, 200, 400, 100, 400, 400
+]
+async def song_start():
+    # Play Mario theme once
+    for i in range(len(mario_notes)):
+        if mario_notes[i] > 0:# 0 represents rest/pause
+            sound.beep(mario_notes[i], mario_durations[i])
+        await runloop.sleep_ms(mario_durations[i])
+runloop.run(song_start())
+
+async def song():
+    # Play Zelda's theme once
+    for i in range(len(zelda_notes)):
+        sound.beep(zelda_notes[i], zelda_durations[i])
+        await runloop.sleep_ms(zelda_durations[i])
+
 # Makes sure the claw is closed
 def claw(n):
     motor.run_for_degrees(port.A,n,200)
 
 # Turn via motion sensor
-def until_gyro(stering,interval,speed,acc):
+def until_gyro(stering,interval,speed,acc=500):
     while motion_sensor.tilt_angles()[0] not in range(interval,interval+50):
         motor_pair.move(motor_pair.PAIR_1,-stering,velocity=-speed,acceleration=acc)
 
@@ -166,6 +211,7 @@ async def cp7():
 
 # Checkpoint 8 (Bullseye)
 async def cp8():
+
     motion_sensor.reset_yaw(0)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,1150,0,velocity=-400,acceleration=500)
     until_gyro(-20,250,300,500)
@@ -248,6 +294,7 @@ async def cp12():
         afstand = distance_sensor.distance(port.B)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
     motor_pair.stop(motor_pair.PAIR_1)
+    runloop.run(song())
     sys.exit()
 
 """----------------------------------------
@@ -336,7 +383,6 @@ async def main():
 runloop.run(main())
 """
 
-
 """
 from hub import sound
 import runloop
@@ -424,14 +470,6 @@ async def main():
 
 runloop.run(main())
 """
-
-
-
-
-
-
-
-
 
 """
 from hub import sound
