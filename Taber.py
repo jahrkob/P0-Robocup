@@ -107,14 +107,6 @@ async def follow_line():
             checkpoint += 1
             await run_cp(checkpoint)
 
-# The function used on the runway
-def runway():
-    afstand = distance_sensor.distance(port.B)
-    while afstand >=1550 or afstand == -1:
-        afstand = distance_sensor.distance(port.B)
-        motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
-
-
 """----------------------------------------
 ----------- CHECKPOINT SECTION ------------
 ----------------------------------------"""
@@ -210,14 +202,12 @@ async def cp7():
 
 # Checkpoint 8 (Bullseye)
 async def cp8():
-
     motion_sensor.reset_yaw(0)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,1150,0,velocity=-400,acceleration=500)
     until_gyro(-20,250,300,500)
     claw(200)
     reflectionC = color_sensor.reflection(port.C)
     reflectionD = color_sensor.reflection(port.D)
-
     while True:
         if reflectionC > 30 and reflectionD > 30:
             reflectionC = color_sensor.reflection(port.C)
@@ -236,7 +226,6 @@ async def cp8():
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,-1000,0,velocity=-500)
     claw(-200)
     
-
     until_gyro(-60,1700,300,500)
 
     reflectionC = color_sensor.reflection(port.C)
