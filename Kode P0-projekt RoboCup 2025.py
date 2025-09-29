@@ -26,12 +26,10 @@ reflectionD = color_sensor.reflection(port.D)
 checkpoint = 0
 
 """----------------------------------------
------------- FUNCTION SECTION -------------
+------------- MUSIC SECTION ---------------
 ----------------------------------------"""
-#useless section
-
-# Darth Theme notes and durations
-zelda_notes = [
+# Darth Vader Theme notes and durations
+darth_notes = [
     392, 392, 392, 311, 466, 392, 311, 466, 392,
     587, 587, 587, 622, 466, 369, 311, 466, 392,
     784, 392, 392, 784, 739, 698, 659, 622, 659,
@@ -41,7 +39,7 @@ zelda_notes = [
     392, 311, 466, 392                            
 ]
 
-zelda_durations = [
+darth_durations = [
     300, 150, 150, 150, 150, 150, 150, 150, 600,
     300, 150, 150, 150, 150, 150, 150, 150, 600,
     300, 150, 150, 300, 150, 150, 150, 150, 600,
@@ -55,10 +53,12 @@ zelda_durations = [
 mario_notes = [
     659, 659, 0, 659, 0, 523, 659, 0, 784, 0, 392
 ]
+
 mario_durations = [
     # Intro line
     200, 200, 100, 200, 100, 200, 300, 100, 350, 200, 300
 ]
+
 async def song_start():
     # Play Mario theme once
     for i in range(len(mario_notes)):
@@ -68,11 +68,14 @@ async def song_start():
 runloop.run(song_start())
 
 async def song():
-    # Play Zelda's theme once
-    for i in range(len(zelda_notes)):
-        sound.beep(zelda_notes[i], zelda_durations[i])
-        await runloop.sleep_ms(zelda_durations[i])
+    # Play Darth Vader's theme once
+    for i in range(len(darth_notes)):
+        sound.beep(darth_notes[i], darth_durations[i])
+        await runloop.sleep_ms(darth_durations[i])
 
+"""----------------------------------------
+------------ FUNCTION SECTION -------------
+----------------------------------------"""
 # Makes sure the claw is closed
 def claw(n):
     motor.run_for_degrees(port.A,n,200)
