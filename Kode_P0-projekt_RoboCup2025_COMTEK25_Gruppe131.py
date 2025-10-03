@@ -59,15 +59,15 @@ mario_durations = [
     200, 200, 100, 200, 100, 200, 300, 100, 350, 200, 300
 ]
 
-async def song_start():
+async def song_mario():
     # Play Mario theme once
     for i in range(len(mario_notes)):
         if mario_notes[i] > 0:# 0 represents rest/pause
             sound.beep(mario_notes[i], mario_durations[i])
         await runloop.sleep_ms(mario_durations[i])
-runloop.run(song_start())
+runloop.run(song_mario())
 
-async def song():
+async def song_vader():
     # Play Darth Vader's theme once
     for i in range(len(vader_notes)):
         sound.beep(vader_notes[i], vader_durations[i])
@@ -285,7 +285,7 @@ async def cp12():
         afstand = distance_sensor.distance(port.B)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
     motor_pair.stop(motor_pair.PAIR_1)
-    runloop.run(song())
+    runloop.run(song_vader())
     sys.exit()
 
 """----------------------------------------
