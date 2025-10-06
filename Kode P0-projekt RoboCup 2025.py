@@ -28,26 +28,21 @@ checkpoint = 0
 """----------------------------------------
 ------------- MUSIC SECTION ---------------
 ----------------------------------------"""
-# Darth Vader Theme notes and durations
-vader_notes = [
-    392, 392, 392, 311, 466, 392, 311, 466, 392,
-    587, 587, 587, 622, 466, 369, 311, 466, 392,
-    784, 392, 392, 784, 739, 698, 659, 622, 659,
-    415, 554, 523, 493, 466, 440, 466,          
-    311, 369, 311, 466, 392, 311, 466, 392,     
-    587, 587, 587, 622, 466, 369, 311, 466, 392,
-    392, 311, 466, 392                            
+nokia_notes = [
+    659, 587, 370, 415,
+    494, 440, 277, 330, 440
 ]
 
-vader_durations = [
-    300, 150, 150, 150, 150, 150, 150, 150, 600,
-    300, 150, 150, 150, 150, 150, 150, 150, 600,
-    300, 150, 150, 300, 150, 150, 150, 150, 600,
-    150, 150, 150, 150, 150, 150, 600,          
-    150, 150, 150, 150, 150, 150, 150, 600,     
-    300, 150, 150, 150, 150, 150, 150, 150, 900,
-    600, 150, 150, 1200                           
+nokia_durations = [
+    300, 300, 300, 300,
+    300, 300, 300, 300, 600
 ]
+
+async def nokia():
+    for i in range(len(nokia_notes)):
+        if nokia_notes[i] > 0:
+            sound.beep(nokia_notes[i], nokia_durations[i])
+        await runloop.sleep_ms(nokia_durations[i])
 
 # Super Mario Bros Main Theme
 mario_notes = [
@@ -55,23 +50,15 @@ mario_notes = [
 ]
 
 mario_durations = [
-    # Intro line
     200, 200, 100, 200, 100, 200, 300, 100, 350, 200, 300
 ]
 
 async def song_start():
-    # Play Mario theme once
     for i in range(len(mario_notes)):
-        if mario_notes[i] > 0:# 0 represents rest/pause
+        if mario_notes[i] > 0:
             sound.beep(mario_notes[i], mario_durations[i])
         await runloop.sleep_ms(mario_durations[i])
 runloop.run(song_start())
-
-async def song():
-    # Play Darth Vader's theme once
-    for i in range(len(vader_notes)):
-        sound.beep(vader_notes[i], vader_durations[i])
-        await runloop.sleep_ms(vader_durations[i])
 
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
@@ -135,7 +122,7 @@ async def cp2():
 async def cp3():
     motion_sensor.reset_yaw(0)
     until_gyro(100,-400,300,500)
-    
+
     claw(200)
 
     until_line(0,300)
@@ -228,7 +215,7 @@ async def cp8():
     await runloop.sleep_ms(1000)
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,-1000,0,velocity=-500)
     claw(-200)
-    
+
     until_gyro(-60,1700,300,500)
 
     reflectionC = color_sensor.reflection(port.C)
@@ -260,7 +247,7 @@ async def cp10():
     motor_pair.stop(motor_pair.PAIR_1)
     await runloop.sleep_ms(500)
     until_gyro(100,-130,300,500)
-    until_line(-3,500)
+    until_line(-4,500)
 
 
 # Checkpoint 11 (Drive around bottle 2)
@@ -273,7 +260,7 @@ async def cp11():
 async def cp12():
     await motor_pair.move_for_degrees(motor_pair.PAIR_1,200,21,velocity=-300, acceleration=500)
     afstand = distance_sensor.distance(port.B)
-    while afstand >=1550 or afstand == -1:
+    while afstand >=1600 or afstand == -1:
         afstand = distance_sensor.distance(port.B)
         motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
 
@@ -281,11 +268,14 @@ async def cp12():
     await runloop.sleep_ms(1000)
 
     afstand = distance_sensor.distance(port.B)
-    while afstand >=1550 or afstand == -1:
-        afstand = distance_sensor.distance(port.B)
-        motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
+    if afstand >=1600 or afstand == -1:
+        while afstand >=1600 or afstand == -1:
+            afstand = distance_sensor.distance(port.B)
+            motor_pair.move(motor_pair.PAIR_1,0,velocity=-500, acceleration=500)
+    else:
+        motor_pair.stop(motor_pair.PAIR_1)
     motor_pair.stop(motor_pair.PAIR_1)
-    runloop.run(song())
+    runloop.run(nokia())
     sys.exit()
 
 """----------------------------------------
