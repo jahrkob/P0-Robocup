@@ -28,6 +28,7 @@ checkpoint = 0
 """----------------------------------------
 ------------- MUSIC SECTION ---------------
 ----------------------------------------"""
+# NOKIA Ringtone
 nokia_notes = [
     659, 587, 370, 415,
     494, 440, 277, 330, 440
@@ -53,12 +54,12 @@ mario_durations = [
     200, 200, 100, 200, 100, 200, 300, 100, 350, 200, 300
 ]
 
-async def song_start():
+async def mario():
     for i in range(len(mario_notes)):
         if mario_notes[i] > 0:
             sound.beep(mario_notes[i], mario_durations[i])
         await runloop.sleep_ms(mario_durations[i])
-runloop.run(song_start())
+runloop.run(mario())
 
 """----------------------------------------
 ------------ FUNCTION SECTION -------------
