@@ -7,7 +7,6 @@ import color
 import distance_sensor
 import sys
 
-# INITIALIZE VARIABLES AND MOTORS
 """
 Port E og F er de 2 små motorer
 Port A er den store motor
@@ -28,7 +27,7 @@ checkpoint = 0
 """----------------------------------------
 ------------- MUSIC SECTION ---------------
 ----------------------------------------"""
-# NOKIA Ringtone
+# Nokia Ringtone
 nokia_notes = [
     659, 587, 370, 415,
     494, 440, 277, 330, 440
@@ -249,7 +248,6 @@ async def cp10():
     await runloop.sleep_ms(500)
     until_gyro(100,-130,300,500)
     until_line(-4,500)
-
 
 # Checkpoint 11 (Drive around bottle 2)
 async def cp11():
